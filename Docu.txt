@@ -1,0 +1,148 @@
++-------------------------------+-----------------------------------------------------------------------+
+|Táblák száma	megvan          |   >= 9                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|Az adatbázis összes oszlopának |   >= 40                                                               |
+|száma          megvan          |                                                                       |
++-------------------------------+-----------------------------------------------------------------------+
+|Check constraint	 megvan |   >= 3 (NOT NULL, UNIQUE, stb. megszorítás használata minden esetben, |
+|                               |   ahol indokolt, ezeket nem számoljuk a 3-ba)                         |
++-------------------------------+-----------------------------------------------------------------------+
+|Elsődleges kulcs     megvan    |   Minden táblán legyen (legalább 1 összetett kulcs,                   |
+|                               |   legalább 1 "IDENTITY"/szekvencia kulcs oszlop)                      |
++-------------------------------+-----------------------------------------------------------------------+
+|Idegen kulcs	     megvan     |   Értelemszerű. „Levegőben lógó” tábla csak kivételesen               |
++-------------------------------+-----------------------------------------------------------------------+
+|Skalár függvény	megvan  |   >= 1                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|DML Trigger	     megvan     |   >= 1                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|Tárolt eljárás	                |   >= 3, legalább egy lekérdező és két módosító tárolt eljárás,        |
+|                               |    használjon paramétereket, és mindenképp legyen hibakezelés,        |
+|          megvan               |   a következő elemekből legalább hármat tartalmazzon:                 |
+|                               |   al-lekérdezés, halmazműveletek, tranzakció, CASE, HAVING, CTE       |
++-------------------------------+-----------------------------------------------------------------------+
+|Indexek	 megvan         |   Minden táblán PK + (összesen) legalább 3 nonclustered index         |
++-------------------------------+-----------------------------------------------------------------------+
+|View	                        |   >= 3 (ne legyen SELECT * FROM table jellegű VIEW,                   |
+|                   2           |   legalább 3 táblás JOIN-os, lekérdezések, LEFT JOIN-t is használva)  |
++-------------------------------+-----------------------------------------------------------------------+
+|Login	          megvan        |   >= 3                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|User	          megvan        |   >= 3                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|Database role	   megvan       |   >= 3                                                                |
++-------------------------------+-----------------------------------------------------------------------+
+|Application role  megvan       |   1                                                                   |
++-------------------------------+-----------------------------------------------------------------------+
+|Napi mentés/helyreállítás	|   Megvalósítás job-bal                                                |
+|    megvan                     |                                                                       |
++-------------------------------+-----------------------------------------------------------------------+
+|Adatbázis létrehozó script	|   schema.sql, tartalmaz DROP, CREATE INSERT, ALTER, stb. utasításokat |
+|megvan                         |                                                                       |
++-------------------------------+-----------------------------------------------------------------------+
+|Adatok feltöltése	        |   data.sql, INSERT-eket, UPDATE-eket tartalmaz,                       |
+|            megvan             |   lehet generálni sok adat miatt, vagy kézzel írni                    |
++-------------------------------+-----------------------------------------------------------------------+
+
+
+https://github.com/CodecoolGlobal/dbspec-masterpiece-general-gabi9669.git ✧(˘◡˘๑ )
+
+https://dbdiagram.io/d/60dc3b2fdd6a597148263e64 (◐U◐)
+
+
+(╭☞⚆ヮ⚆)╭☞ SETUP{
+                    1 -> schema.sql
+                    2 -> DBroles.sql
+                    3 -> LoginUser.sql
+                    4 -> AppRole.sql
+                   +----------------------------+
+                   |5 -> customer_person.sql    |Sorrend mindegy 
+                   |6 -> product_game.sql       |
+                   +----------------------------+
+                   |7 -> gamefeatures.sql       |
+                   |8 -> gamegenre.sql          |Sorrend mindegy
+                   |9 -> gametype.sql           |
+                   |10 -> gameplatform.sql      |
+                   +----------------------------+
+                    11 -> gameprice.sql
+                   +----------------------------+
+                   |14 -> ProductView.sql       |
+                   |15 -> OrderView.sql     -   |
+                   |16 -> MarkStat.sql          |
+                   |17 -> DontChangeFeatures.sql|Sorrend mindegy
+                   |18 -> DontChangeGenre.sql   |
+                   |19 -> DontChangePlatform.sql|
+                   |20 -> DontChangeType.sql    |
+                   |21 -> DontChangeStatus.sql  |
+                   +----------------------------+
+                    22 -> DiscPrice.sql
+                    23 -> AddNewOrder.sql
+                    24 -> CheckDateNewOrder.sql
+                    25 -> Order_Succes.sql
+                    26 -> orders_OrderDetails.sql
+                   +----------------------------+
+                   |27 -> GetFeatId.sql         |
+                   |28 -> GetGenId.sql          |Sorrend mindegy
+                   |29 -> GetPlatId.sql         |
+                   |30 -> GetTypeId.sql         |
+                   +----------------------------+
+                    31 -> AddNewProduct.sql
+                    32 -> NC_Indexes.sql
+                    33 -> FullBackUp.sql
+                    34 -> DiffBackUp.sql
+                    35 -> LogBackUp.sql
+                    }
+
+Vagy csak simán a    (/¯–‿･)/¯   JOKER.sql
+
+Nincs create view permission ಥ _ ಥ || de nem is lesz! ᕦ(ò_óˇ)
+
+
+main > 
+-------DBRoles.sql
+-------LoginUser.sql
+-------schema.sql
+-------AppRole.sql
+-------README.md
+-------JOKER.sql
+-------NC_Indexes.sql
+
+.Backup >
+-------DiffBackUp.sql
+-------FullBackUp.sql
+-------LogBackUp.sql
+-------vizsga.bak(2021.07.20)---------
+
+Inserts >
+-------customer_person.sql
+-------gamefeature.sql
+-------gamegenre.sql
+-------gameprice.sql
+-------gametype.sql
+-------gameplatform.sql
+-------orders_OrderDetails.sql
+-------product_game.sql
+
+View >
+-------ProductView.sql
+-------MarkStat.sql
+
+ScalarFun >
+-------DiscPrice.sql
+-------GetFeatId.sql
+-------GetGenId.sql
+-------GetPlatId.sql
+-------GetTypeId.sql
+
+StoredProc >
+-------AddNewOrder.sql
+-------AddNewProduct.sql
+-------AddPrice.sql
+
+Trigger >
+-------CheckDateNewOrder.sql
+-------DontChangeFeatures.sql
+-------DontChangeGenre.sql
+-------DontChangePlatform.sql
+-------DontChangeStatus.sql
+-------DontChangeType.sql
