@@ -120,9 +120,9 @@ GO
 
 CREATE TABLE [Customer].[Person] (
   [Person_ID] int PRIMARY KEY IDENTITY(1, 1),
-  [DisplayName] nvarchar(100) UNIQUE NOT NULL,
-  [Firstname] nvarchar(100),
-  [Lastname] nvarchar(100),
+  [DisplayName] nvarchar(100) NOT NULL,
+  [Firstname] nvarchar(100)NOT NULL,
+  [Lastname] nvarchar(100) NOT NULL,
   [EmailAddress] nvarchar(255) UNIQUE NOT NULL,
   [AddressLine] nvarchar(150) NOT NULL,
   [City] nvarchar(100) NOT NULL,
@@ -178,7 +178,9 @@ GO
 
 CREATE TABLE [Orders].[OrderDetails] (
   [Game_ID] int NOT NULL,
-  [Order_ID] int NOT NULL
+  [Order_ID] int NOT NULL,
+  [Platform_ID] int NOT NULL,
+  [Type_ID] int NOT NULL
 )
 GO
 ---TRIGGER---
@@ -1316,6 +1318,35 @@ left join gp on gp.Game_ID=gg.Game_ID
 left join gpr on gpr.Game_ID=gg.Game_ID
 GO
 
+
+----------------------------------------------------------------------------------------------------------
+USE vizsga
+GO
+
+DROP VIEW IF EXISTS Orders.Orders_Extended
+GO
+
+CREATE VIEW Orders.Orders_Extended as
+SELECT o.Order_ID,
+	   cp.DisplayName,
+	   os.StatusDescription,
+	   g.Game_name,
+	   ISNULL(gpr.Price,'0') AS BasePrice,
+	   o.DiscountedPrice,
+	   gpr.Price-o.DiscountedPrice AS [Save],
+	   o.Order_Date
+FROM Product.Game g
+join Orders.OrderDetails od on od.Game_ID=g.Game_ID
+join Orders.Orders o on o.Order_ID=od.Order_ID
+join Orders.OrderStatus os on os.OrderStatus_ID=o.OrderStatus_ID
+join Customer.Person cp on cp.Person_ID=o.Person_ID
+join Product.Platform p on p.Platform_ID=od.Platform_ID
+join Product.Type t on t.Type_ID=od.Type_ID
+join Product.GamePrice gpr on gpr.Game_ID=od.Game_ID and gpr.Platform_ID=od.Platform_ID and gpr.Type_ID=od.Type_ID
+ORDER BY Order_ID
+OFFSET 0 ROWS
+GO
+
 ------------------------------------------------------------------------------------------------
 
 USE vizsga
@@ -1442,14 +1473,16 @@ SET NOCOUNT ON
 BEGIN TRY
 DECLARE @PID int = (select cp.Person_ID from Customer.Person cp where cp.DisplayName like @whom)
 DECLARE @GID int = (select g.Game_ID from Product.Game g where g.Game_name like @whatName)
+DECLARE @PLID int = (select p.Platform_ID from Product.Platform p where p.PlatformName like @whatPlat)
+DECLARE @TID int = (select t.Type_ID from Product.Type t where t.TypeName like @whatType)
 DECLARE @OID TABLE (OrderID int)
 
 INSERT INTO Orders.Orders(Person_ID,OrderStatus_ID,Order_Date,DiscountedPrice)
 OUTPUT inserted.Order_ID INTO @OID
 VALUES(@PID,1,GETDATE(),dbo.DiscPrice(@whatName,@whatPlat,@whatType))
 
-INSERT INTO Orders.OrderDetails(Game_ID,Order_ID)
-	SELECT @GID, o.OrderID
+INSERT INTO Orders.OrderDetails(Game_ID,Order_ID,Platform_ID,Type_ID)
+	SELECT @GID, o.OrderID, @PLID, @TID
 	from @OID o
 END TRY
 BEGIN CATCH
@@ -2068,7 +2101,7 @@ EXEC msdb.dbo.sp_add_jobserver @job_name=N'LOG_BACKUP', @server_name = N'DESKTOP
 GO
 USE [msdb]
 GO
-EXEC msdb.dbo.sp_add_jobstep @job_name=N'LOG_BACKUP', @step_name=N'LOGABACKUP', 
+EXEC msdb.dbo.sp_add_jobstep @job_name=N'LOG_BACKUP', @step_name=N'LOGBACKUP', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
 		@on_success_action=1, 
@@ -2123,3 +2156,5 @@ EXEC msdb.dbo.sp_add_jobschedule @job_name=N'LOG_BACKUP', @name=N'TR_LOG_BACKUP'
 		@active_end_time=235959, @schedule_id = @schedule_id OUTPUT
 select @schedule_id
 GO
+
+

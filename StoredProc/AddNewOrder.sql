@@ -9,14 +9,16 @@ SET NOCOUNT ON
 BEGIN TRY
 DECLARE @PID int = (select cp.Person_ID from Customer.Person cp where cp.DisplayName like @whom)
 DECLARE @GID int = (select g.Game_ID from Product.Game g where g.Game_name like @whatName)
+DECLARE @PLID int = (select p.Platform_ID from Product.Platform p where p.PlatformName like @whatPlat)
+DECLARE @TID int = (select t.Type_ID from Product.Type t where t.TypeName like @whatType)
 DECLARE @OID TABLE (OrderID int)
 
 INSERT INTO Orders.Orders(Person_ID,OrderStatus_ID,Order_Date,DiscountedPrice)
 OUTPUT inserted.Order_ID INTO @OID
 VALUES(@PID,1,GETDATE(),dbo.DiscPrice(@whatName,@whatPlat,@whatType))
 
-INSERT INTO Orders.OrderDetails(Game_ID,Order_ID)
-	SELECT @GID, o.OrderID
+INSERT INTO Orders.OrderDetails(Game_ID,Order_ID,Platform_ID,Type_ID)
+	SELECT @GID, o.OrderID, @PLID, @TID
 	from @OID o
 END TRY
 BEGIN CATCH

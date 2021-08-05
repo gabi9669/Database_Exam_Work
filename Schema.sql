@@ -120,9 +120,9 @@ GO
 
 CREATE TABLE [Customer].[Person] (
   [Person_ID] int PRIMARY KEY IDENTITY(1, 1),
-  [DisplayName] nvarchar(100) UNIQUE NOT NULL,
-  [Firstname] nvarchar(100),
-  [Lastname] nvarchar(100),
+  [DisplayName] nvarchar(100) NOT NULL,
+  [Firstname] nvarchar(100) NOT NULL,
+  [Lastname] nvarchar(100) NOT NULL,
   [EmailAddress] nvarchar(255) UNIQUE NOT NULL,
   [AddressLine] nvarchar(150) NOT NULL,
   [City] nvarchar(100) NOT NULL,
@@ -143,7 +143,7 @@ ALTER TABLE [Customer].[Person] ADD CONSTRAINT PostLEN CHECK(LEN([PostalCode]) >
 GO
 ALTER TABLE [Customer].[Person] ADD CONSTRAINT DispNameLEN CHECK(LEN([DisplayName]) >=6)
 GO
-ALTER TABLE [Customer].[Person] ADD CONSTRAINT DispNameSPACE CHECK(LEN([DisplayName]) not like '% % %')
+ALTER TABLE [Customer].[Person] ADD CONSTRAINT DispNameSPACE CHECK(([DisplayName]) not like '% % %')
 GO
 ALTER TABLE [Customer].[Person] ADD CONSTRAINT EmaiCheck CHECK([EmailAddress] like '%@%.%')
 GO
@@ -178,7 +178,9 @@ GO
 
 CREATE TABLE [Orders].[OrderDetails] (
   [Game_ID] int NOT NULL,
-  [Order_ID] int NOT NULL
+  [Order_ID] int NOT NULL,
+  [Platform_ID] int NOT NULL,
+  [Type_ID] int NOT NULL
 )
 GO
 ---TRIGGER---

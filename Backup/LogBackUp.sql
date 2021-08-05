@@ -15,7 +15,7 @@ EXEC msdb.dbo.sp_add_jobserver @job_name=N'LOG_BACKUP', @server_name = N'DESKTOP
 GO
 USE [msdb]
 GO
-EXEC msdb.dbo.sp_add_jobstep @job_name=N'LOG_BACKUP', @step_name=N'LOGABACKUP', 
+EXEC msdb.dbo.sp_add_jobstep @job_name=N'LOG_BACKUP', @step_name=N'LOGBACKUP', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
 		@on_success_action=1, 

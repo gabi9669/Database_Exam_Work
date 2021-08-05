@@ -24,7 +24,7 @@
 |Indexek	 megvan         |   Minden táblán PK + (összesen) legalább 3 nonclustered index         |
 +-------------------------------+-----------------------------------------------------------------------+
 |View	                        |   >= 3 (ne legyen SELECT * FROM table jellegű VIEW,                   |
-|                   2           |   legalább 3 táblás JOIN-os, lekérdezések, LEFT JOIN-t is használva)  |
+|                   megvan     |   legalább 3 táblás JOIN-os, lekérdezések, LEFT JOIN-t is használva)  |
 +-------------------------------+-----------------------------------------------------------------------+
 |Login	          megvan        |   >= 3                                                                |
 +-------------------------------+-----------------------------------------------------------------------+
@@ -38,7 +38,7 @@
 |    megvan                     |                                                                       |
 +-------------------------------+-----------------------------------------------------------------------+
 |Adatbázis létrehozó script	|   schema.sql, tartalmaz DROP, CREATE INSERT, ALTER, stb. utasításokat |
-|megvan                         |                                                                       |
+|meglesz                        |                                                                       |
 +-------------------------------+-----------------------------------------------------------------------+
 |Adatok feltöltése	        |   data.sql, INSERT-eket, UPDATE-eket tartalmaz,                       |
 |            megvan             |   lehet generálni sok adat miatt, vagy kézzel írni                    |
@@ -66,36 +66,38 @@ https://dbdiagram.io/d/60dc3b2fdd6a597148263e64 (◐U◐)
                    +----------------------------+
                     11 -> gameprice.sql
                    +----------------------------+
-                   |14 -> ProductView.sql       |
-                   |15 -> OrderView.sql     -   |
-                   |16 -> MarkStat.sql          |
-                   |17 -> DontChangeFeatures.sql|Sorrend mindegy
-                   |18 -> DontChangeGenre.sql   |
-                   |19 -> DontChangePlatform.sql|
-                   |20 -> DontChangeType.sql    |
-                   |21 -> DontChangeStatus.sql  |
+                   |12 -> ProductView.sql       |
+                   |13 -> OrderView.sql     -   |
+                   |14 -> MarkStat.sql          |
+                   |15 -> DontChangeFeatures.sql|Sorrend mindegy
+                   |16 -> DontChangeGenre.sql   |
+                   |17 -> DontChangePlatform.sql|
+                   |18 -> DontChangeType.sql    |
+                   |19 -> DontChangeStatus.sql  |
                    +----------------------------+
-                    22 -> DiscPrice.sql
-                    23 -> AddNewOrder.sql
-                    24 -> CheckDateNewOrder.sql
-                    25 -> Order_Succes.sql
-                    26 -> orders_OrderDetails.sql
+                    20 -> DiscPrice.sql
+                    21 -> AddNewOrder.sql
+                    22 -> CheckDateNewOrder.sql
+                    23 -> Order_Succes.sql
+                    24 -> orders_OrderDetails.sql
                    +----------------------------+
-                   |27 -> GetFeatId.sql         |
-                   |28 -> GetGenId.sql          |Sorrend mindegy
-                   |29 -> GetPlatId.sql         |
-                   |30 -> GetTypeId.sql         |
+                   |25 -> GetFeatId.sql         |
+                   |26 -> GetGenId.sql          |Sorrend mindegy
+                   |27 -> GetPlatId.sql         |
+                   |28 -> GetTypeId.sql         |
                    +----------------------------+
-                    31 -> AddNewProduct.sql
-                    32 -> NC_Indexes.sql
-                    33 -> FullBackUp.sql
-                    34 -> DiffBackUp.sql
-                    35 -> LogBackUp.sql
+                    29 -> AddNewProduct.sql
+                    30 -> AddPrice.sql
+                    31 -> NC_Indexes.sql
+                    32 -> FullBackUp.sql
+                    33 -> DiffBackUp.sql
+                    34 -> LogBackUp.sql
                     }
 
-Vagy csak simán a    (/¯–‿･)/¯   JOKER.sql
+Vagy csak simán a  (/¯–‿･)/¯   JOKER.sql
 
 Nincs create view permission ಥ _ ಥ || de nem is lesz! ᕦ(ò_óˇ)
+SQLQuery7 jó ötlet volt,de nem úgy működik, ahogy szerettem volna (╥_╥)
 
 
 main > 
@@ -124,8 +126,9 @@ Inserts >
 -------product_game.sql
 
 View >
--------ProductView.sql
 -------MarkStat.sql
+-------OrderView.sql
+-------ProductView.sql
 
 ScalarFun >
 -------DiscPrice.sql
@@ -138,6 +141,7 @@ StoredProc >
 -------AddNewOrder.sql
 -------AddNewProduct.sql
 -------AddPrice.sql
+-------Order_Succes.sql
 
 Trigger >
 -------CheckDateNewOrder.sql
